@@ -298,7 +298,7 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
   //172.20.10.2
   useEffect(()=>{
    // const pc =new  RTCPeerConnection();
-    var socket = io('https://tic-tac-eblav0tat-michealajits-projects.vercel.app/');
+    var socket = io('https://tic-tac-tsc.vercel.app');
    // setPc(pc);
       setSocket(socket)
       
