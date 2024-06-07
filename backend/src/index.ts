@@ -17,8 +17,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://tic-tac-tsc-c3n3.vercel.app",
-    methods: ['GET', 'POST']
+    origin: 'https://tic-tac-tsc-c3n3.vercel.app',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Access-Control-Allow-Headers', 'Access-Control-Allow-Origin', 'Origin, X-Requested-With, Content-Type, Accept'],
+    credentials: true
   }
 });
 app.use(cors({
