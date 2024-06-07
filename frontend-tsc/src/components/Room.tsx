@@ -512,9 +512,11 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
         console.log('came in');
         if(videoTrack){
         console.log('came inside video');
+        //@ts-ignore
           remoteVideoRef.current.srcObject.addTrack(videoTrack)
         }
         if(audioTrack){
+        //@ts-ignore
           remoteVideoRef.current.srcObject.addTrack(audioTrack)
         }
       }
@@ -537,6 +539,7 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
       
     };
    useEffect(()=>{
+        //@ts-ignore
   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
  },[chatArr]);
  const handleMouseMove = (event) => {
@@ -581,7 +584,9 @@ const handleMouseDown = (event) => {
         RemoteCursor && <RemoteCursor
               
               style={{
+        //@ts-ignore
                 left: `${remoteMousePosition?.x+remoteWidth+diffWidth}px`,
+        //@ts-ignore
                 top: `${remoteMousePosition?.y+diffHeight}px`,
                 zIndex: 999
               }}
@@ -591,8 +596,12 @@ const handleMouseDown = (event) => {
     {mobileWidth?
     <MobileContainer style={{height:window.innerHeight}}>
         <VideoContainer>
-        <video autoPlay width={widthVideoMobile}  ref={localVideoRef}/>
-        <video autoPlay width={widthVideoMobile} ref={remoteVideoRef}/>
+        <video autoPlay
+        //@ts-ignore
+         width={widthVideoMobile}  ref={localVideoRef}/>
+        <video autoPlay 
+        //@ts-ignore
+        width={widthVideoMobile} ref={remoteVideoRef}/>
         </VideoContainer>
         <Tic 
            onMouseMove={handleMouseMove}
@@ -614,7 +623,8 @@ const handleMouseDown = (event) => {
          {matrix.map((row,rowIndex) =>(
            <div key={rowIndex}>
             {row.map(
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex,e)}>{Element}</button>)
+
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
@@ -679,7 +689,7 @@ const handleMouseDown = (event) => {
          {matrix.map((row,rowIndex) =>(
            <div key={rowIndex}>
             {row.map(
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex,e)}>{Element}</button>)
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
@@ -715,7 +725,7 @@ const handleMouseDown = (event) => {
          {matrix.map((row,rowIndex) =>(
            <div key={rowIndex}>
             {row.map(
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={true} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex,e)}>{Element}</button>)
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={true} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
