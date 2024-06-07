@@ -20,6 +20,7 @@ const io = new socket_io_1.Server(server, {
 const User = new Users_1.default();
 app.get('/hello', (req, res) => {
     res.send('hello world');
+    console.log('hello world');
 });
 exports.default = (req, res) => {
     res.status(200).json({ message: 'Hello from TypeScript on Vercel!' });

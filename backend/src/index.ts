@@ -5,7 +5,6 @@ import express from 'express';
 import { Server } from 'socket.io';
 import Users  from "./Users";
 import https from 'node:https'
-import { VercelRequest, VercelResponse } from '@vercel/node';
 
 // curl -k https://localhost:8000/
 
@@ -25,12 +24,11 @@ const io = new Server(server, {
 const User = new Users();
 
 app.get('/hello',(req,res)=>{
-    res.send('hello world')
+    res.send('hello world');
+    
 })
 
-export default (req: VercelRequest, res: VercelResponse) => {
-  res.status(200).json({ message: 'Hello from TypeScript on Vercel!' });
-};
+
 
 io.on('connection', (socket: Socket) => {
   socket.on('name',({name,city,width,height})=>{
