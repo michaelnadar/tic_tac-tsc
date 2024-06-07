@@ -7,6 +7,8 @@ interface User{
     name:string |undefined,
     socket:Socket,
     city:string| undefined,
+    width:Number |undefined,
+    height:Number|undefined
 }
 interface Room{
     user1:User,
@@ -26,10 +28,10 @@ interface Room{
         this.userDisconnect = new Map<User| undefined,string>;
     }
 
-        createUser(socket:Socket,name:string,city:string){
+        createUser(socket:Socket,name:string,city:string,width:Number,height:Number){
         console.log(`user connected ${socket.id}`);
         this.user.push({
-            name,socket,city
+            name,socket,city,width,height
         });
         this.queue.push(socket.id);
         this.clearQueue();
@@ -90,7 +92,8 @@ interface Room{
                 room:roomId,
                 name:user2.name,
                 city:user2.city,
-                type:'offer'
+                width:user2.width,
+                height:user2.height
             }
             )
             user2.socket.emit('room',
@@ -98,7 +101,8 @@ interface Room{
                 room:roomId,
                 name:user1.name,
                 city:user1.city,
-                type:'answer'
+                width:user1.width,
+                height:user1.height
             }
             )
             
@@ -147,11 +151,11 @@ interface Room{
                 const user = rooom?.user1.socket.id === socket.id ? rooom.user2 :rooom?.user1;
                 user?.socket.emit('client-answer',{room,answer});
             })
-            socket.on("add-ice-candidate", ({candidate, room}) => {
+            socket.on("add-ice-candidate", ({candidate, room,type}) => {
                 const roomId = room?.toString();
                 const rooom = this.room.get(roomId);
                 const user = rooom?.user1.socket.id === socket.id ? rooom.user2 :rooom?.user1;
-                user?.socket.emit('ice-candicate',{candidate});
+                user?.socket.emit('ice-candicate',{candidate,type});
                // this.onIceCandidates(roomId, socket.id, candidate, type);
             });
             // socket.on("offer", ({sdp, roomId}: {sdp: string, roomId: string}) => {

@@ -7,8 +7,11 @@ const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
 const Users_1 = __importDefault(require("./Users"));
+// curl -k https://localhost:8000/
+// const key = fs.readFileSync('cert.key');
+// const cert = fs.readFileSync('cert.crt');
 const app = (0, express_1.default)();
-const server = http_1.default.createServer(http_1.default);
+const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "*"
@@ -16,9 +19,9 @@ const io = new socket_io_1.Server(server, {
 });
 const User = new Users_1.default();
 io.on('connection', (socket) => {
-    socket.on('name', ({ name, city }) => {
+    socket.on('name', ({ name, city, width, height }) => {
         console.log(name, city);
-        User.createUser(socket, name, city);
+        User.createUser(socket, name, city, width, height);
     });
     socket.on("disconnect", () => {
         // console.log(room);

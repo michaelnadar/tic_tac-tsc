@@ -10,7 +10,7 @@ function Home(){
     const videoRef = useRef<HTMLVideoElement>(null);
    const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
+  
   const getCam = async ()=>{
     const stream = await window.navigator.mediaDevices.getUserMedia({
       video: true,
@@ -29,6 +29,7 @@ function Home(){
   }
   useEffect(() => {
     // Focus on the input field when the component 
+   
     console.log(videoRef.current);
     console.log(videoRef);
     console.log('hello world');
@@ -61,7 +62,7 @@ function Home(){
         return (
             <>
             <Container>
-            <video autoPlay ref={videoRef}></video>
+            <video autoPlay height={300} controls ref={videoRef}></video>
             <div>
 
             <input style={{padding:20,fontSize:20}} autoFocus ref={inputRef} onKeyDown={handleKeyDown}  type="text" onChange={(e) => {
@@ -82,7 +83,18 @@ function Home(){
 
 export default Home;
 
+const breakpoints = {
+  mobile: '768px',
+  tablet: '1024px',
+  desktop: '1200px',
+};
+
 const Container = styled.div`
+@media (max-width: ${breakpoints.mobile}) {
+  flex-direction: column;
+  gap: 50px;
+  
+}
 display: flex;
 align-items: center;
 justify-content: center;

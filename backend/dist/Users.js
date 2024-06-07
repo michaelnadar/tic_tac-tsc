@@ -8,10 +8,10 @@ class Users {
         this.queue = [];
         this.userDisconnect = new Map;
     }
-    createUser(socket, name, city) {
+    createUser(socket, name, city, width, height) {
         console.log(`user connected ${socket.id}`);
         this.user.push({
-            name, socket, city
+            name, socket, city, width, height
         });
         this.queue.push(socket.id);
         this.clearQueue();
@@ -63,13 +63,15 @@ class Users {
             room: roomId,
             name: user2.name,
             city: user2.city,
-            type: 'offer'
+            width: user2.width,
+            height: user2.height
         });
         user2.socket.emit('room', {
             room: roomId,
             name: user1.name,
             city: user1.city,
-            type: 'answer'
+            width: user1.width,
+            height: user1.height
         });
     }
     handleQuery(socket) {
@@ -115,11 +117,11 @@ class Users {
             const user = (rooom === null || rooom === void 0 ? void 0 : rooom.user1.socket.id) === socket.id ? rooom.user2 : rooom === null || rooom === void 0 ? void 0 : rooom.user1;
             user === null || user === void 0 ? void 0 : user.socket.emit('client-answer', { room, answer });
         });
-        socket.on("add-ice-candidate", ({ candidate, room }) => {
+        socket.on("add-ice-candidate", ({ candidate, room, type }) => {
             const roomId = room === null || room === void 0 ? void 0 : room.toString();
             const rooom = this.room.get(roomId);
             const user = (rooom === null || rooom === void 0 ? void 0 : rooom.user1.socket.id) === socket.id ? rooom.user2 : rooom === null || rooom === void 0 ? void 0 : rooom.user1;
-            user === null || user === void 0 ? void 0 : user.socket.emit('ice-candicate', { candidate });
+            user === null || user === void 0 ? void 0 : user.socket.emit('ice-candicate', { candidate, type });
             // this.onIceCandidates(roomId, socket.id, candidate, type);
         });
         // socket.on("offer", ({sdp, roomId}: {sdp: string, roomId: string}) => {
