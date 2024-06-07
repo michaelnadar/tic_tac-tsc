@@ -17,7 +17,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*"
+    origin: "https://tic-tac-tsc-c3n3.vercel.app"
   }
 });
 
