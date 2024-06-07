@@ -81,7 +81,9 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
   const [remoteMousePosition, setRemoteMousePosition] = useState({ x: 0, y: 0 });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [remoteWidth,setRemoteWidth] =useState<number>(0);
+  //@ts-ignore
  const [sendingPc,setSendingPc] = useState<RTCPeerConnection|null>(null);
+ //@ts-ignore
  const [receivingPc,setReceivingPc] = useState<RTCPeerConnection|null>(null);
   const [videoTrack, setVideoTrack] = useState<MediaStreamTrack|null>(null);
   const [audioTrack,setAudioTrack] = useState<MediaStreamTrack|null>(null);
@@ -381,7 +383,7 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
         console.log(room,'room');
        console.log(pc)
     socket.emit('answer-client',{room,answer});
-    pc.oniceconnectionstatechange= e=>{
+    pc.oniceconnectionstatechange= ()=>{
       console.log(pc.iceConnectionState);
       pc.ontrack = e =>{
         console.log(e,'ontrack')
@@ -624,7 +626,7 @@ const handleMouseDown = (event) => {
            <div key={rowIndex}>
             {row.map(
 
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={()=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
@@ -689,7 +691,7 @@ const handleMouseDown = (event) => {
          {matrix.map((row,rowIndex) =>(
            <div key={rowIndex}>
             {row.map(
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={disable} key={colIndex} onClick={()=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
@@ -725,7 +727,7 @@ const handleMouseDown = (event) => {
          {matrix.map((row,rowIndex) =>(
            <div key={rowIndex}>
             {row.map(
-              (Element,colIndex) => (<button style={{color:'red'}} disabled={true} key={colIndex} onClick={(e)=>handleClick(rowIndex,colIndex)}>{Element}</button>)
+              (Element,colIndex) => (<button style={{color:'red'}} disabled={true} key={colIndex} onClick={()=>handleClick(rowIndex,colIndex)}>{Element}</button>)
             )}
             </div>
           ))}
@@ -787,6 +789,7 @@ const VideoContainer = styled.div`
 display:flex;
 `
 
+//@ts-ignore
 const MobileChat = styled.div`
 
 `
@@ -837,11 +840,7 @@ overflow: hidden;
 
 `
 
-const breakpoints = {
-  mobile: '768px',
-  tablet: '1024px',
-  desktop: '1200px',
-};
+
 
 const Tic = styled.div`
   flex:1;
