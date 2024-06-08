@@ -286,6 +286,8 @@ function Room({name,localAudioTrack,localVideoTrack}:{name:string,localAudioTrac
    });
   socket?.on('doreset',()=>{
     console.log('handlereset');
+    setDiffHeight(0);
+    setDiffWidth(0);
     setMatrix(number);
     setCount(0);
     setDisable(true);

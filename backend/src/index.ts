@@ -18,6 +18,9 @@ app.use(cors());
 const io = new Server(server, {
   cors: {
     origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
   }
 });
 const User = new Users();
