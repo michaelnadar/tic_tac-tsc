@@ -14,18 +14,12 @@ import https from 'node:https'
 
 const app = express();
 const server = http.createServer(app);
-
+app.use(cors());
 const io = new Server(server, {
   cors: {
-    origin: 'https://tic-tac-tsc-c3n3.vercel.app',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Access-Control-Allow-Headers', 'Access-Control-Allow-Origin', 'Origin, X-Requested-With, Content-Type, Accept'],
-    credentials: true
+    origin: '*',
   }
 });
-app.use(cors({
-  origin: 'https://tic-tac-tsc-c3n3.vercel.app'
-}));
 const User = new Users();
 
 app.get('/hello',(req,res)=>{
