@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
-const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
 const Users_1 = __importDefault(require("./Users"));
@@ -13,10 +12,9 @@ const Users_1 = __importDefault(require("./Users"));
 // const cert = fs.readFileSync('cert.crt');
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
-app.use((0, cors_1.default)());
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: '*',
+        origin: "*"
     }
 });
 const User = new Users_1.default();
@@ -36,6 +34,6 @@ io.on('connection', (socket) => {
 });
 // 172.20.10.2
 // 192.168.1.104
-server.listen(3000, () => {
+server.listen(3000, "192.168.1.110", () => {
     console.log('listening on *:3000');
 });

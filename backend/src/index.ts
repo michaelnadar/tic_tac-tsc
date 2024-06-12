@@ -14,13 +14,10 @@ import https from 'node:https'
 
 const app = express();
 const server = http.createServer(app);
-app.use(cors());
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
-    credentials: true,
+    origin: "*"
   }
 });
 const User = new Users();
@@ -45,6 +42,6 @@ io.on('connection', (socket: Socket) => {
 });
 // 172.20.10.2
 // 192.168.1.104
-server.listen(3000,() => {
+server.listen(3000,"192.168.1.110",() => {
     console.log('listening on *:3000');
 });
