@@ -597,8 +597,8 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
   useEffect(()=>{
     console.log(number)
-    setMatrix((prev)=>{
-      prev = number;
+    setMatrix(()=>{
+     // prev = number;
       return number
     })
     },[number]);
