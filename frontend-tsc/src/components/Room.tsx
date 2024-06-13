@@ -99,6 +99,10 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
   const gameChannel = useRef<RTCDataChannel>(null);
   const messageChannel = useRef<RTCDataChannel>(null);
   const resetChannel = useRef<RTCDataChannel>(null);
+  const [styleChat,setStyleChat] = useState({
+   display:'flex',
+   justifyContent:'end',
+  })
 
   useEffect(() => {
     if (window.innerWidth < 700) {
@@ -141,8 +145,12 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       const msgs = [...chatArr];
       msgs.push({ You: { chat, random } });
       setchatArr(msgs);
-      messageChannel.current.send(JSON.stringify(chat));
       setChat('');
+      setStyleChat({
+        ...styleChat
+      });
+      messageChannel.current.send(JSON.stringify(chat));
+      
     }
   };
 
@@ -362,8 +370,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
     }
   
       receivePc.ondatachannel = receiveChannelCallback;
-  
-    var socket = io('https://ef29-183-87-203-166.ngrok-free.app',{
+  try {
+    
+    var socket = io('https://701e-183-87-203-166.ngrok-free.app',{
       transportOptions: {
         polling: {
           extraHeaders: {
@@ -373,6 +382,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       }
     });
     // setPc(pc);
+  } catch (error) {
+    console.log(error)
+  }
     setSocket(socket)
 
     socket.on('connect', () => {
@@ -467,6 +479,22 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
     receivePc.oniceconnectionstatechange = () => {
       console.log(receivePc.iceConnectionState);
+      switch (receivePc.iceConnectionState) {
+        case 'disconnected':
+          console.log('ICE Connection Disconnected');
+          //handleDisconnect();
+          break;
+        case 'failed':
+          console.log('ICE Connection Failed');
+          //handleDisconnect();
+          break;
+        case 'closed':
+          console.log('ICE Connection Closed');
+          //handleDisconnect();
+          break;
+        // You can handle other states like 'connected', 'completed', etc. as needed
+      }
+    
       //@ts-ignore
       if (receivePc.iceConnectionState === "connected") {
 
@@ -680,42 +708,34 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
   return (
     <>
-      {
-        RemoteCursor && <RemoteCursor
+     
+      
+         {mobileWidth ? loading ? <div style={{ color: 'green' }}>'Looking for Partner.........'  
+         {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
+         </div> 
 
-          style={{
-            //@ts-ignore
-            left: `${remoteMousePosition?.x + remoteWidth + diffWidth}px`,
-            //@ts-ignore
-            top: `${remoteMousePosition?.y + diffHeight}px`,
-            zIndex: 999
-          }}
-        >
-          {strangerName}
-        </RemoteCursor>}
-      {mobileWidth ?
-        <MobileContainer style={{ height: window.innerHeight }}>
-          <VideoContainer>
+      :  
+      (
+      <MobileContainer style={{ height: window.innerHeight }}>
+    <VideoContainer>
+      <video autoPlay
+      //@ts-ignore
+              width={widthVideoMobile} height={widthVideoMobile} ref={localVideoRef} />
             <video autoPlay
               //@ts-ignore
-              width={widthVideoMobile} ref={localVideoRef} />
-            <video autoPlay
-              //@ts-ignore
-              width={widthVideoMobile} ref={remoteVideoRef} />
-          </VideoContainer>
+              width={widthVideoMobile} height={widthVideoMobile}  ref={remoteVideoRef} />
+            </VideoContainer>
           <Tic
             onMouseMove={handleMouseMove}
-            onMouseDown={handleMouseDown}
+          onMouseDown={handleMouseDown}
           >
-
-
 
             <div style={{ color: 'red' }}>Stranger's Name:{strangerName}</div>
             <div style={{ color: 'red' }}>Stranger's Location:{strangerCity}</div>
 
             <div style={{ marginTop: 25 }}>
-              <button onClick={handleReset}>Reset</button>
-            </div>
+          <button onClick={handleReset}>Reset</button>
+        </div>
             <div style={{ marginTop: 25, fontSize: 30 }}>
               {winner ? `Winner ${winVal}` : ''}
             </div>
@@ -723,46 +743,60 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
             {matrix.map((row, rowIndex) => (
               <div key={rowIndex}>
                 {row.map(
-
+                  
                   (Element, colIndex) => (<button style={{ color: 'red' }} disabled={disable} key={colIndex} onClick={() => handleClick(rowIndex, colIndex)}>{Element}</button>)
                 )}
               </div>
             ))}
-            {!winner ? (<div style={{ marginTop: 25, fontSize: 30, color: 'green' }}>
+          {!winner ? (<div style={{ marginTop: 25, fontSize: 30, color: 'green' }}>
               {draw ? `Draw ` : `Player ${preVal} Turn`}
 
             </div>
             ) : ''}
-
+          
           </Tic>
-          <ChatContainer>
-
-            <Scroll>
-              {chatArr.map((val, index) =>
-                <Chat ref={scrollRef} key={index} style={{ color: `${val?.Stranger ? val?.Stranger.random : val?.You.random}` }}>
+        <ChatContainer style={styleChat}>
+      
+      <Scroll>
+    {chatArr.map((val, index) =>
+    <Chat ref={scrollRef} key={index} style={{ color: `${val?.Stranger ? val?.Stranger.random : val?.You.random}` }}>
                   {val?.Stranger ? `Stranger:${val?.Stranger.chat}` : `You:${val?.You.chat}`}
                 </Chat>
               )}
             </Scroll>
-
-            <div style={{ display: 'flex', gap: 5, width: '100vw' }}>
-              <input autoFocus={false} ref={inputRef}
-                type="text"
-                style={{ width: '100%', fontSize: 16, height: 25, pointerEvents: 'all' }}
-                onKeyDown={handleKeyDown} value={chat} onChange={(e) => {
-                  setChat(e.target.value);
-                }}>
-              </input>
-              <button ref={buttonRef} style={{ color: 'red', padding: 0, height: 25, pointerEvents: 'all' }} onClick={(e) => handleChat(e)}>Send</button>
-            </div>
-          </ChatContainer>
-
-        </MobileContainer>
-        :
-        (
+          <div style={{ display: 'flex', gap: 5, width: '100vw',justifyContent:'end',bottom:0}}>
+        <input autoFocus={false} ref={inputRef}
+      type="text"
+    style={{ width: '100%', fontSize: 16, height: 25, pointerEvents: 'all' }}
+  onKeyDown={handleKeyDown} value={chat} onChange={(e) => {
+    setChat(e.target.value);
+  }}>
+</input>
+<button ref={buttonRef} style={{ color: 'red', padding: 0, height: 25, pointerEvents: 'all' }} onClick={(e) => handleChat(e)}>Send</button>
+</div>
+</ChatContainer>
+</MobileContainer>
+            )
+            
+                
+                :
+                (
+                 
 
           <>
-
+ {
+                    RemoteCursor && <RemoteCursor
+            
+                      style={{
+                        //@ts-ignore
+                        left: `${remoteMousePosition?.x + remoteWidth + diffWidth}px`,
+                        //@ts-ignore
+                        top: `${remoteMousePosition?.y + diffHeight}px`,
+                        zIndex: 999
+                      }}
+                    >
+                      {strangerName}
+                    </RemoteCursor>}
 
             <Container
             >
@@ -805,7 +839,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
               >
                 {/* <video autoPlay width={400} height={400} ref={remoteVideoRef} /> */}
-                <video autoPlay width={remoteWidth} height={190} ref={remoteVideoRef} muted={true} />
+                <video autoPlay width={remoteWidth} height={190} ref={remoteVideoRef}  />
                 {loading ? <div style={{ color: 'green' }}>'Looking for Partner.........'
                   {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
                 </div> : (
@@ -900,11 +934,8 @@ const ChatContainer = styled.div`
   flex-direction:column;
     height:100%;
   @media (max-width: 700px) {
-   position:absolute;
-    bottom:0;
+   position:relative;
     pointer-events: none;
-    display:block;
-    height:auto;
   }
 `
 
@@ -948,7 +979,6 @@ const Tic = styled.div`
 const Container = styled.div`
   height: 100%;
   width: 100%;
- 
   color: white;
   display: flex;
   align-items: center;
@@ -959,6 +989,8 @@ const Scroll = styled.div`
 @media (max-width: 700px) {
   overflow:hidden;
   pointer-events: none;
+      position: absolute;
+    bottom: 35px;
 }
   overflow:auto;
   /* Custom scrollbar styles for WebKit browsers */
