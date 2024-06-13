@@ -312,8 +312,18 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
   // 192.168.1.104
   //172.20.10.2
   useEffect(() => {
-    const sendPc = new RTCPeerConnection();
-    const receivePc = new RTCPeerConnection();
+    const configuration = {
+      iceServers:[
+          {
+              urls:[
+                'stun:stun.l.google.com:19302',
+                'stun:stun1.l.google.com:19302'
+              ]
+          }
+      ]
+  }
+    const sendPc = new RTCPeerConnection(configuration);
+    const receivePc = new RTCPeerConnection(configuration);
     setSendingPc(sendPc);
     setReceivingPc(receivePc);
     // const sendMessage = (type, data) => {
@@ -372,15 +382,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       receivePc.ondatachannel = receiveChannelCallback;
   try {
     
-    var socket = io('https://tic-tac-tsc.onrender.com',{
-      transportOptions: {
-        polling: {
-          extraHeaders: {
-            'ngrok-skip-browser-warning': 'true'
-          }
-        }
-      }
-    });
+    var socket = io('https://tic-tac-tsc.onrender.com');
     // setPc(pc);
   } catch (error) {
     console.log(error)
