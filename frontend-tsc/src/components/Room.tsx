@@ -670,6 +670,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
     //@ts-ignore
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatArr]);
+
   const handleMouseMove = (event) => {
     setMousePosition({ x: event.clientX, y: event.clientY });
 
@@ -677,6 +678,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       //  console.log(mousePosition);
       const x = mousePosition.x;
       const y = mousePosition.y;
+      console.log(connected)
       if (connected) {
         mouseChannel.current.send(JSON.stringify({ x, y }));
       }
