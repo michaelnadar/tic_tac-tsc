@@ -288,24 +288,6 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       // Use functional update to ensure the latest state
     
   } 
-  
-// else {
-//       console.log(count);
-//       console.log(matrix);
-//       setWinVal("");
-//       setWinner(false);
-//       setDraw(false);
-
-//       const winner = checkWinner(matrix);
-//       if (winner) {
-//           setWinner(true);
-//           setWinVal(winner);
-//           setDraw(false);
-//           setDisable(true);
-//       } else if (!handleDraw(matrix)) {
-//           setDraw(true);
-//       }
-//   }
 };
 
  
@@ -359,9 +341,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       
       channel.onmessage =
       (e) => {
+        console.log(JSON.parse(e.data));
         const mouse = JSON.parse(e.data);
         setRemoteMousePosition({ x: mouse.x, y: mouse.y});
-      //  console.log(JSON.parse(e.data));
   } 
     }
     const receiveChannelCallback = (event) => {
