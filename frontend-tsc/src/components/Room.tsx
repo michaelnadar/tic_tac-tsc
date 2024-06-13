@@ -712,8 +712,19 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
   return (
     <>
-     
-      
+     {
+     RemoteCursor && <RemoteCursor
+            
+            style={{
+              //@ts-ignore
+              left: `${remoteMousePosition?.x + remoteWidth + diffWidth}px`,
+              //@ts-ignore
+              top: `${remoteMousePosition?.y + diffHeight}px`,
+              zIndex: 999
+            }}
+          >
+            {strangerName}
+          </RemoteCursor>}
          {mobileWidth ? loading ? <div style={{ color: 'green' }}>'Looking for Partner.........'  
          {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
          </div> 
@@ -788,19 +799,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
                  
 
           <>
- {
-                    RemoteCursor && <RemoteCursor
-            
-                      style={{
-                        //@ts-ignore
-                        left: `${remoteMousePosition?.x + remoteWidth + diffWidth}px`,
-                        //@ts-ignore
-                        top: `${remoteMousePosition?.y + diffHeight}px`,
-                        zIndex: 999
-                      }}
-                    >
-                      {strangerName}
-                    </RemoteCursor>}
+ 
 
             <Container
             >
