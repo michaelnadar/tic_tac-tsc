@@ -89,8 +89,8 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
   const [audioTrack, setAudioTrack] = useState<MediaStreamTrack | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
-  const [diffWidth, setDiffWidth] = useState<Number>(0);
-  const [diffHeight, setDiffHeight] = useState<Number>(0);
+  const [diffWidth, setDiffWidth] = useState<number>(0);
+  const [diffHeight, setDiffHeight] = useState<number>(0);
   const [mobileWidth, setMobileWidth] = useState<boolean>(false);
   const [widthVideoMobile, setWidthVideoMobile] = useState<Number>(0);
   const mouseChannel = useRef<RTCDataChannel>(null);
@@ -230,6 +230,8 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
     setChat('');
     number = [["-", "-", "-"], ["-", "-", "-"], ["-", "-", "-"]];
    // setMatrix(number);
+   setDiffHeight(0);
+   setDiffWidth(0);
     setCount(0);
     setDisable(false);
     setPreVal("X");
@@ -341,9 +343,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       
       channel.onmessage =
       (e) => {
-        console.log(JSON.parse(e.data));
+     //   console.log(JSON.parse(e.data));
         const mouse = JSON.parse(e.data);
-        setRemoteMousePosition({ x: mouse.x, y: mouse.y});
+        setRemoteMousePosition({ x: mouse?.x, y: mouse?.y});
   } 
     }
     const receiveChannelCallback = (event) => {
@@ -390,7 +392,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
         setMyName(name);
       } catch (err) {
         console.log(err);
-        socket.emit('name', { name, city: 'no Network' });
+        socket.emit('name', { name, city: 'no Network' , width, height});
       }
     };
     fetchLocation();
@@ -463,21 +465,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
     receivePc.oniceconnectionstatechange = () => {
       console.log(receivePc.iceConnectionState);
-      switch (receivePc.iceConnectionState) {
-        case 'disconnected':
-          console.log('ICE Connection Disconnected');
-          //handleDisconnect();
-          break;
-        case 'failed':
-          console.log('ICE Connection Failed');
-          //handleDisconnect();
-          break;
-        case 'closed':
-          console.log('ICE Connection Closed');
-          //handleDisconnect();
-          break;
-        // You can handle other states like 'connected', 'completed', etc. as needed
-      }
+      
     
       //@ts-ignore
       if (receivePc.iceConnectionState === "connected") {
@@ -527,8 +515,10 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       setDisable(false);
       setLoading(false);
 
-      if(diffWidth === 0){
+      console.log(height,width);
+      
         if (window.innerWidth > width) {
+
           const currdiff = window.innerWidth / 2.4;
           const remotediff = width / 2.4;
           setDiffWidth((currdiff - remotediff) / 2);
@@ -537,17 +527,17 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
           const currdiff = window.innerWidth / 2.4;
           const remotediff = width / 2.4;
           setDiffWidth((currdiff - remotediff) / 2);
-  
           console.log((currdiff - remotediff) / 2)
         }
-      }
-      if(diffHeight === 0){
+     
         if (window.innerHeight > height) {
           setDiffHeight((window.innerHeight - height) / 2);
+          console.log((window.innerHeight - height) / 2)
         } else {
           setDiffHeight((window.innerHeight - height) / 2);
+          console.log((window.innerHeight - height) / 2)
         }
-      }
+      
       console.log('offer called');
       mouseChannel.current = sendPc.createDataChannel('mouseChannel');
       messageChannel.current  = sendPc.createDataChannel('messageChannel');
@@ -660,7 +650,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       //  console.log(mousePosition);
       const x = mousePosition.x;
       const y = mousePosition.y;
-      console.log(connected)
+    //  console.log(connected)
       if (connected) {
         mouseChannel.current.send(JSON.stringify({ x, y }));
       }
@@ -694,19 +684,19 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
   return (
     <>
+   
      {
-     RemoteCursor && <RemoteCursor
-            
-            style={{
-              //@ts-ignore
-              left: `${remoteMousePosition?.x + remoteWidth + diffWidth}px`,
-              //@ts-ignore
-              top: `${remoteMousePosition?.y + diffHeight}px`,
-              zIndex: 999
-            }}
-          >
-            {strangerName}
-          </RemoteCursor>}
+    !mobileWidth && <RemoteCursor
+          
+          style={{
+
+            left: `${remoteMousePosition?.x+remoteWidth+diffWidth}px`,
+            top: `${remoteMousePosition?.y+diffHeight}px`,
+          }}
+        >
+      {strangerName}
+</RemoteCursor>
+        }
          {mobileWidth ? loading ? <div style={{ color: 'green' }}>'Looking for Partner.........'  
          {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
          </div> 
