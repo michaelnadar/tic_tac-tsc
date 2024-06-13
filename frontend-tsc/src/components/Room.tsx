@@ -372,7 +372,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       receivePc.ondatachannel = receiveChannelCallback;
   try {
     
-    var socket = io('https://701e-183-87-203-166.ngrok-free.app',{
+    var socket = io('https://tic-tac-tsc.onrender.com',{
       transportOptions: {
         polling: {
           extraHeaders: {
