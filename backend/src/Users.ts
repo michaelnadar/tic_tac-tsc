@@ -109,34 +109,6 @@ interface Room{
     }
     
     handleQuery(socket:Socket){
-            socket.on('msg',({data})=>{
-                console.log(data);
-                const roomId = data?.room?.toString();
-                const room = this.room.get(roomId);
-                const user = room?.user1.socket.id === socket.id ? room.user2 :room?.user1;
-                user?.socket.emit('receive',{data}); 
-               
-            });
-            socket.on('reset',(data)=>{
-                //console.log(data,'roomreset');
-                const roomId = data?.toString();
-                const room = this.room.get(roomId);
-                const user = room?.user1.socket.id === socket.id ? room.user2 :room?.user1;
-                user?.socket.emit('doreset'); 
-            });
-            socket.on('chat',({chat,room})=>{
-              //  console.log(chat,rooom)
-                const roomId = room?.toString();
-                const rooom = this.room.get(roomId);
-                const user = rooom?.user1.socket.id === socket.id ? rooom.user2 :rooom?.user1;
-                user?.socket.emit('receiveChat',chat);
-            });
-            // socket.on('mouse',({x,y,room})=>{
-            //     const roomId = room?.toString();
-            //     const rooom = this.room.get(roomId);
-            //     const user = rooom?.user1.socket.id === socket.id ? rooom.user2 :rooom?.user1;
-            //     user?.socket.emit('mouse_point_receive',{x,y});
-            // });
             socket.on('offer',({sdp,room})=>{
                 const roomId = room?.toString();
                 const rooom = this.room.get(roomId);

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import '../App.css'
-import io from 'socket.io-client';
+import io, { connect } from 'socket.io-client';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -149,7 +149,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       setStyleChat({
         ...styleChat
       });
-      messageChannel.current.send(JSON.stringify(chat));
+      if(connected){
+        messageChannel.current.send(JSON.stringify(chat));
+      }
       
     }
   };
@@ -176,7 +178,9 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
         c
       }
     //  socket.emit('msg', { data });
+    if(connected){
       gameChannel.current.send(JSON.stringify({data}));
+      }
       // socket.on('receive',(preVal)=>{
       console.log(preVal);
 
@@ -310,11 +314,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
     const receivePc = new RTCPeerConnection(configuration);
     setSendingPc(sendPc);
     setReceivingPc(receivePc);
-    // const sendMessage = (type, data) => {
-    //   const message = JSON.stringify({ type, data });
-
-    //   console.log(`Sent ${type} data: `, data);
-    // };
+   
     const handleDChat = (e) =>{
       const chat = JSON.parse(e.data);
       console.log(chat);
@@ -327,7 +327,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
         console.log(updatedChatArr);
         return updatedChatArr;
       });
-      //console.log(chatArr);
+      
   }
    
     const handleGameChannelStatus = ()=>{
@@ -385,14 +385,15 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
 
     const fetchLocation = async () => {
       try {
-        const response = await axios.get(`http://ip-api.com/json`);
+        const response = await axios.get(`https://ipinfo.io/json`);
         setLocation(response.data);
         const city = response?.data?.city;
         socket.emit('name', { name, city, width, height });
         setMyName(name);
       } catch (err) {
         console.log(err);
-        socket.emit('name', { name, city: 'no Network' , width, height});
+        socket.emit('name', { name, city: 'NA' , width, height});
+        setMyName(name);
       }
     };
     fetchLocation();
@@ -713,8 +714,6 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
               width={widthVideoMobile} height={widthVideoMobile}  ref={remoteVideoRef} />
             </VideoContainer>
           <Tic
-            onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
           >
 
             <div style={{ color: 'red' }}>Stranger's Name:{strangerName}</div>

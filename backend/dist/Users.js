@@ -75,34 +75,6 @@ class Users {
         });
     }
     handleQuery(socket) {
-        socket.on('msg', ({ data }) => {
-            var _a;
-            console.log(data);
-            const roomId = (_a = data === null || data === void 0 ? void 0 : data.room) === null || _a === void 0 ? void 0 : _a.toString();
-            const room = this.room.get(roomId);
-            const user = (room === null || room === void 0 ? void 0 : room.user1.socket.id) === socket.id ? room.user2 : room === null || room === void 0 ? void 0 : room.user1;
-            user === null || user === void 0 ? void 0 : user.socket.emit('receive', { data });
-        });
-        socket.on('reset', (data) => {
-            //console.log(data,'roomreset');
-            const roomId = data === null || data === void 0 ? void 0 : data.toString();
-            const room = this.room.get(roomId);
-            const user = (room === null || room === void 0 ? void 0 : room.user1.socket.id) === socket.id ? room.user2 : room === null || room === void 0 ? void 0 : room.user1;
-            user === null || user === void 0 ? void 0 : user.socket.emit('doreset');
-        });
-        socket.on('chat', ({ chat, room }) => {
-            //  console.log(chat,rooom)
-            const roomId = room === null || room === void 0 ? void 0 : room.toString();
-            const rooom = this.room.get(roomId);
-            const user = (rooom === null || rooom === void 0 ? void 0 : rooom.user1.socket.id) === socket.id ? rooom.user2 : rooom === null || rooom === void 0 ? void 0 : rooom.user1;
-            user === null || user === void 0 ? void 0 : user.socket.emit('receiveChat', chat);
-        });
-        // socket.on('mouse',({x,y,room})=>{
-        //     const roomId = room?.toString();
-        //     const rooom = this.room.get(roomId);
-        //     const user = rooom?.user1.socket.id === socket.id ? rooom.user2 :rooom?.user1;
-        //     user?.socket.emit('mouse_point_receive',{x,y});
-        // });
         socket.on('offer', ({ sdp, room }) => {
             const roomId = room === null || room === void 0 ? void 0 : room.toString();
             const rooom = this.room.get(roomId);
