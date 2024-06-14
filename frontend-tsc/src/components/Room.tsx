@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import '../App.css'
-import io, { connect } from 'socket.io-client';
+import io from 'socket.io-client';
 import axios from 'axios';
 import styled from 'styled-components';
 
