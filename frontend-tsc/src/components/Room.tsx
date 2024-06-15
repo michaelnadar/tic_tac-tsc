@@ -386,6 +386,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
     const fetchLocation = async () => {
       try {
         const response = await axios.get(`https://ipinfo.io/json`);
+        console.log(response);
         setLocation(response.data);
         const city = response?.data?.city;
         socket.emit('name', { name, city, width, height });
@@ -698,7 +699,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       {strangerName}
 </RemoteCursor>
         }
-         {mobileWidth ? loading ? <div style={{ color: 'green' }}>'Looking for Partner.........'  
+         {mobileWidth ? loading ? <div style={{ color: 'green',display:'flex',justifyContent:'center',alignItems:'center' }}>'Looking for Partner.........'  
          {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
          </div> 
 
