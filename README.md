@@ -43,12 +43,16 @@ this works for both frontend-tsc and backend just changes the directory and inst
    ```
        
 
+### Feature
 
-###Feature
 
 Remote Cursor feature demo video 
 
-https://github.com/michaelnadar/tic_tac-tsc/assets/105809204/de9f79f0-efba-4e39-b20a-d48c5d755ba9
+
+https://github.com/michaelnadar/tic_tac-tsc/assets/105809204/012d958d-0e33-4bc3-9637-e68f86aa5f5a
+
+
+
 
 
 
