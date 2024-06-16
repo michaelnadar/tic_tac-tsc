@@ -699,7 +699,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       {strangerName}
 </RemoteCursor>
         }
-         {mobileWidth ? loading ? <div style={{ color: 'green',display:'flex',justifyContent:'center',alignItems:'center' }}>'Looking for Partner.........'  
+         {mobileWidth ? loading ? <div style={{ color: 'green',display:'flex',justifyContent:'center',alignItems:'center',height:'100%' }}>'Looking for Partner.........'  
          {resetData && <div style={{ color: 'red' }}> partner got disconnect!!!! Again Looking for partner</div>}
          </div> 
 

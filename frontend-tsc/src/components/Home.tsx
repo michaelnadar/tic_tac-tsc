@@ -62,7 +62,7 @@ function Home(){
         return (
             <>
             <Container>
-            <video autoPlay height={300} controls ref={videoRef}></video>
+            <video autoPlay height={300} ref={videoRef}></video>
             <div>
 
             <input style={{padding:20,fontSize:20}} autoFocus ref={inputRef} onKeyDown={handleKeyDown}  type="text" onChange={(e) => {
