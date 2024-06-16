@@ -366,7 +366,7 @@ function Room({ name, localAudioTrack, localVideoTrack }: { name: string, localA
       receivePc.ondatachannel = receiveChannelCallback;
   try {
     
-    var socket = io('https://tic-tac-tsc.onrender.com');
+    var socket = io('https://future-theadora-studentscoder-d9106bc6.koyeb.app');
     // setPc(pc);
   } catch (error) {
     console.log(error)
